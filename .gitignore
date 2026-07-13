@@ -1,0 +1,60 @@
+# FinanceFlow AI — .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+*.env.local
+
+# Database
+*.db
+*.sqlite3
+*-shm
+*-wal
+
+# Uploads & Test Data
+/uploads/
+/test_invoices/
+/sample_data/
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+frontend/dist/
+frontend/.next/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# PaddleOCR models cache
+~/.paddleocr/

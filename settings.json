@@ -1,0 +1,15 @@
+{
+    "PO_TOLERANCE_PERCENT": 10.0,
+    "MAX_INVOICE_AGE_DAYS": 365,
+    "REQUIRE_GST": true,
+    "REQUIRE_PO": false,
+    "DUPLICATE_DETECTION_DAYS": 90,
+    "MIN_CONFIDENCE_THRESHOLD": 85,
+    "REQUIRE_LINE_ITEMS_MATCH": true,
+    "EMAIL_INGESTION_ENABLED": true,
+    "EMAIL_SERVER": "imap.gmail.com",
+    "EMAIL_ADDRESS": "anitejchandersood@gmail.com",
+    "EMAIL_PASSWORD": "ttsd qrjf dmbw ayvi",
+    "ERP_SYNC_ENABLED": false,
+    "ERP_WEBHOOK_URL": ""
+}

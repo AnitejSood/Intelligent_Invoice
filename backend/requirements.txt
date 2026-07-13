@@ -1,0 +1,38 @@
+# FinanceFlow AI — Backend Dependencies
+
+# Web Framework
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+python-multipart==0.0.20
+
+# Database
+sqlalchemy==2.0.41
+alembic==1.15.2
+
+# Data Validation
+pydantic==2.11.3
+pydantic-settings==2.9.1
+
+# AI / LLM
+google-generativeai==0.8.5
+
+# OCR & PDF Processing
+PyMuPDF==1.25.5
+pdfplumber==0.11.6
+paddlepaddle==3.1.0
+paddleocr==2.10.0
+
+# Image Processing (for OCR preprocessing)
+Pillow==11.2.1
+opencv-python-headless==4.11.0.86
+numpy>=1.24.0
+
+# Seed Data
+faker==37.3.0
+
+# Testing
+pytest==8.4.1
+httpx==0.28.1
+
+# Utilities
+python-dotenv==1.1.0
