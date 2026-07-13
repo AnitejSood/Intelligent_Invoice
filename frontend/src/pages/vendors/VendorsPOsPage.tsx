@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { 
@@ -17,6 +17,14 @@ export default function VendorsPOsPage() {
   const [activeTab, setActiveTab] = useState<'pos' | 'vendors'>('pos');
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [statusFilter, setStatusFilter] = useState("ALL");
+
+  useEffect(() => {
+    const s = searchParams.get('search');
+    if (s !== null) {
+      setSearchQuery(s);
+      setActiveTab('pos');
+    }
+  }, [searchParams]);
 
   const { data: posData, isLoading: isLoadingPOs } = useQuery({
     queryKey: ['purchase_orders'],
@@ -77,14 +85,20 @@ export default function VendorsPOsPage() {
   };
 
   const filteredPOs = posData?.items?.filter((po: any) => {
-    const matchesSearch = po.po_number.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          po.vendor?.vendor_name.toLowerCase().includes(searchQuery.toLowerCase());
+    const q = searchQuery.toLowerCase();
+    const poNum = (po.po_number || "").toLowerCase();
+    const vendorName = (po.vendor?.vendor_name || "").toLowerCase();
+    
+    const matchesSearch = poNum.includes(q) || vendorName.includes(q);
     const matchesStatus = statusFilter === "ALL" || po.status === statusFilter;
     return matchesSearch && matchesStatus;
   }) || [];
 
   const filteredVendors = vendorsData?.items?.filter((v: any) => {
-    const matchesSearch = v.vendor_name.toLowerCase().includes(searchQuery.toLowerCase());
+    const q = searchQuery.toLowerCase();
+    const vendorName = (v.vendor_name || "").toLowerCase();
+    
+    const matchesSearch = vendorName.includes(q);
     const matchesStatus = statusFilter === "ALL" || v.status === statusFilter;
     return matchesSearch && matchesStatus;
   }) || [];
