@@ -74,22 +74,49 @@ class PipelineService:
         # ──────────────────────────────────────────────────
         # Stage 2: OCR Pipeline (Document Detection + Text Extraction)
         # ──────────────────────────────────────────────────
+        from backend.core.config import settings
         t0 = time.time()
-        doc_type, extracted_text, confidence = OCRService.process_document(file_path)
-        ocr_ms = int((time.time() - t0) * 1000)
-
-        PipelineService._log_stage(db, placeholder.id, "Document Detection & OCR", "COMPLETED", ocr_ms, {
-            "document_type": doc_type,
-            "extraction_confidence": round(confidence, 4),
-            "characters_extracted": len(extracted_text),
-            "text_preview": extracted_text[:200] + "..." if len(extracted_text) > 200 else extracted_text,
-        })
+        
+        extracted_text = ""
+        confidence = 0.0
+        doc_type = "UNKNOWN"
+        images = None
+        
+        if settings.USE_LOCAL_OCR:
+            doc_type, extracted_text, confidence = OCRService.process_document(file_path)
+            ocr_ms = int((time.time() - t0) * 1000)
+            PipelineService._log_stage(db, placeholder.id, "Local OCR Processing", "COMPLETED", ocr_ms, {
+                "document_type": doc_type,
+                "extraction_confidence": round(confidence, 4),
+                "characters_extracted": len(extracted_text),
+                "text_preview": extracted_text[:200] + "..." if len(extracted_text) > 200 else extracted_text,
+            })
+        else:
+            # Use Gemini Multimodal Vision (Bypass local OCR)
+            from backend.ocr.document_detector import DocumentDetector
+            doc_type = DocumentDetector.detect_type(file_path)
+            if doc_type == "DIGITAL":
+                from backend.ocr.pdf_extractor import PDFExtractor
+                extracted_text = PDFExtractor.extract_text(file_path)
+                confidence = 1.0
+            else:
+                # SCANNED - convert to images and skip text extraction
+                images = OCRService.convert_pdf_to_images(file_path)
+                confidence = 0.95 # Assumed high confidence for Gemini Vision
+                extracted_text = ""
+            
+            ocr_ms = int((time.time() - t0) * 1000)
+            PipelineService._log_stage(db, placeholder.id, "Document Detection (Vision Mode)", "COMPLETED", ocr_ms, {
+                "document_type": doc_type,
+                "image_count": len(images) if images else 0,
+                "note": "Local OCR skipped. Delegating to Gemini Vision."
+            })
 
         # ──────────────────────────────────────────────────
         # Stage 3: Gemini AI Semantic Extraction
         # ──────────────────────────────────────────────────
         t0 = time.time()
-        extracted_data = GeminiService.extract_data(extracted_text)
+        extracted_data = GeminiService.extract_data(text=extracted_text, images=images)
         gemini_ms = int((time.time() - t0) * 1000)
 
         fields_found = sum(1 for v in [

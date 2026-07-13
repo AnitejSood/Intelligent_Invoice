@@ -25,6 +25,31 @@ class OCRService:
         return text.strip()
 
     @classmethod
+    def convert_pdf_to_images(cls, file_path: str) -> list:
+        """Convert a PDF file to a list of PIL Images using PyMuPDF (fitz)."""
+        import fitz
+        from PIL import Image
+        import io
+        
+        images = []
+        try:
+            logger.info(f"Converting PDF {file_path} to images for Gemini Multimodal processing.")
+            doc = fitz.open(file_path)
+            # Limit to first 5 pages to prevent massive API payloads
+            for page_num in range(min(5, len(doc))):
+                page = doc[page_num]
+                # 2x zoom for better text legibility by the vision model
+                pix = page.get_pixmap(matrix=fitz.Matrix(2, 2)) 
+                img_data = pix.tobytes("png")
+                img = Image.open(io.BytesIO(img_data))
+                images.append(img)
+            doc.close()
+            return images
+        except Exception as e:
+            logger.error(f"Failed to convert PDF to images: {e}")
+            return []
+
+    @classmethod
     def process_document(cls, file_path: str) -> tuple[str, str, float]:
         """
         Main entry point for document text extraction.

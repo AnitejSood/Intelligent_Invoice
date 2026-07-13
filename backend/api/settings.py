@@ -12,6 +12,7 @@ class SettingsUpdateSchema(BaseModel):
     MAX_INVOICE_AGE_DAYS: int
     REQUIRE_GST: bool
     REQUIRE_PO: bool
+    USE_LOCAL_OCR: bool = False
     DUPLICATE_DETECTION_DAYS: int = 90
     MIN_CONFIDENCE_THRESHOLD: int = 85
     REQUIRE_LINE_ITEMS_MATCH: bool = True

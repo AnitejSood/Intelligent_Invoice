@@ -52,7 +52,7 @@ If a value is missing, return null.
 Do not perform financial validation.
 Do not approve or reject invoices."""
 
-    EXTRACTION_PROMPT = """Extract the following fields from this invoice text:
+    EXTRACTION_PROMPT = """Extract the following fields from this invoice:
 - Vendor Name
 - Invoice Number
 - Invoice Date (format: YYYY-MM-DD)
@@ -72,11 +72,7 @@ Important rules:
 - Extract every line item you can find, even if formatting is messy
 - Dates must be in YYYY-MM-DD format
 - If currency symbol is ₹ or Rs, set currency to "INR"
-
-Invoice Text:
-\"\"\"
-{text}
-\"\"\""""
+"""
 
     EXPLANATION_SYSTEM_PROMPT = """You are assisting an Accounts Payable analyst.
 The business rules have already produced a final decision.
@@ -98,21 +94,29 @@ Write a clear, detailed explanation in under 200 words suitable for an AP analys
 Structure: Start with the decision, then list key findings, then any concerns."""
 
     @classmethod
-    def extract_invoice_data(cls, text: str) -> ExtractedInvoiceData:
-        """Extract invoice structured data from OCR text using Schema Enforcement."""
+    def extract_invoice_data(cls, text: str | None = None, images: list | None = None) -> ExtractedInvoiceData:
+        """Extract invoice structured data using Schema Enforcement. Supports text or images (multimodal)."""
         try:
             client = get_gemini_client()
         except ValueError as e:
             logger.error(f"Initialization failed: {e}")
             return ExtractedInvoiceData()
             
-        prompt = cls.EXTRACTION_PROMPT.format(text=text)
+        prompt = cls.EXTRACTION_PROMPT
+        if text:
+            prompt += f"\n\nInvoice Text:\n\"\"\"\n{text}\n\"\"\""
+            
+        # Combine text prompt and images into a single contents list
+        contents = [prompt]
+        if images:
+            contents.extend(images)
+            logger.info(f"Passing {len(images)} images to Gemini for Multimodal OCR.")
         
         try:
             # Generate content with guaranteed Pydantic schema structure
             response = client.models.generate_content(
                 model=settings.GEMINI_MODEL,
-                contents=prompt,
+                contents=contents,
                 config=types.GenerateContentConfig(
                     system_instruction=cls.SYSTEM_PROMPT,
                     temperature=0.0,

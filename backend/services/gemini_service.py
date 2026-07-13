@@ -9,14 +9,14 @@ class GeminiService:
     """Service layer for AI extraction and explanation."""
     
     @classmethod
-    def extract_data(cls, text: str) -> ExtractedInvoiceData:
+    def extract_data(cls, text: str | None = None, images: list | None = None) -> ExtractedInvoiceData:
         """
         Extract structured invoice data using Gemini.
         Returns empty/default data if extraction fails.
         """
-        logger.info(f"Starting Gemini data extraction for text of length {len(text)}")
+        logger.info(f"Starting Gemini data extraction. Text length: {len(text) if text else 0}, Images: {len(images) if images else 0}")
         try:
-            extracted_data = GeminiClient.extract_invoice_data(text)
+            extracted_data = GeminiClient.extract_invoice_data(text=text, images=images)
             return extracted_data
         except Exception as e:
             logger.error(f"Error in GeminiService extraction: {e}")

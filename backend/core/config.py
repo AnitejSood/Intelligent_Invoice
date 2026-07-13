@@ -19,11 +19,12 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "uploads"
     MAX_UPLOAD_SIZE_MB: int = 20
 
-    # Gemini AI
+    # AI / LLM
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite"
 
     # OCR
+    USE_LOCAL_OCR: bool = False
     OCR_CONFIDENCE_THRESHOLD: int = 70
 
     # Business Rules

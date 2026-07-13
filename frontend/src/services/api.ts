@@ -76,6 +76,7 @@ export interface BusinessSettings {
   MAX_INVOICE_AGE_DAYS: number;
   REQUIRE_GST: boolean;
   REQUIRE_PO: boolean;
+  USE_LOCAL_OCR: boolean;
   DUPLICATE_DETECTION_DAYS: number;
   MIN_CONFIDENCE_THRESHOLD: number;
   REQUIRE_LINE_ITEMS_MATCH: boolean;

@@ -11,6 +11,7 @@ export default function SettingsPage() {
   const [maxAge, setMaxAge] = useState(365);
   const [requireGst, setRequireGst] = useState(true);
   const [requirePo, setRequirePo] = useState(true);
+  const [useLocalOcr, setUseLocalOcr] = useState(false);
   
   // New Validation Settings
   const [duplicateDays, setDuplicateDays] = useState(90);
@@ -33,6 +34,7 @@ export default function SettingsPage() {
       setMaxAge(settings.MAX_INVOICE_AGE_DAYS ?? 365);
       setRequireGst(settings.REQUIRE_GST ?? true);
       setRequirePo(settings.REQUIRE_PO ?? true);
+      setUseLocalOcr(settings.USE_LOCAL_OCR ?? false);
       
       setDuplicateDays(settings.DUPLICATE_DETECTION_DAYS ?? 90);
       setMinConfidence(settings.MIN_CONFIDENCE_THRESHOLD ?? 85);
@@ -54,6 +56,7 @@ export default function SettingsPage() {
       MAX_INVOICE_AGE_DAYS: maxAge,
       REQUIRE_GST: requireGst,
       REQUIRE_PO: requirePo,
+      USE_LOCAL_OCR: useLocalOcr,
       DUPLICATE_DETECTION_DAYS: duplicateDays,
       MIN_CONFIDENCE_THRESHOLD: minConfidence,
       REQUIRE_LINE_ITEMS_MATCH: requireLineItems,
@@ -71,6 +74,7 @@ export default function SettingsPage() {
     setMaxAge(365);
     setRequireGst(true);
     setRequirePo(true);
+    setUseLocalOcr(false);
     setDuplicateDays(90);
     setMinConfidence(85);
     setRequireLineItems(true);
@@ -121,6 +125,31 @@ export default function SettingsPage() {
             </h3>
             
             <div className="space-y-6">
+              {/* OCR Engine Toggle */}
+              <div className="flex items-center justify-between p-4.5 rounded-xl border border-slate-850 bg-slate-950/20">
+                <div className="space-y-1 pr-4">
+                  <div className="text-sm font-bold text-white flex items-center gap-2">
+                    Enable Local OCR Engine (PaddleOCR)
+                    {!useLocalOcr && <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Gemini Vision Active</span>}
+                  </div>
+                  <div className="text-[11px] text-slate-400 leading-normal font-medium">
+                    When enabled, the system runs PaddleOCR locally (requires 1.5GB RAM). When disabled, it uses Gemini Multimodal Vision, which uses almost no RAM and works perfectly on Render's Free tier!
+                  </div>
+                </div>
+                <button
+                  onClick={() => setUseLocalOcr(!useLocalOcr)}
+                  className={`w-12 h-6.5 rounded-full p-1 transition-all duration-300 ${
+                    useLocalOcr ? "bg-primary shadow-[0_0_12px_var(--color-primary)]" : "bg-slate-800"
+                  }`}
+                >
+                  <div 
+                    className={`bg-white w-4.5 h-4.5 rounded-full shadow-md transform transition-transform duration-300 ${
+                      useLocalOcr ? "translate-x-5.5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+
               {/* Strict PO Toggle */}
               <div className="flex items-center justify-between p-4.5 rounded-xl border border-slate-850 bg-slate-950/20">
                 <div className="space-y-1 pr-4">
