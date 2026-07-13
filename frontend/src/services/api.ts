@@ -76,6 +76,15 @@ export interface BusinessSettings {
   MAX_INVOICE_AGE_DAYS: number;
   REQUIRE_GST: boolean;
   REQUIRE_PO: boolean;
+  DUPLICATE_DETECTION_DAYS: number;
+  MIN_CONFIDENCE_THRESHOLD: number;
+  REQUIRE_LINE_ITEMS_MATCH: boolean;
+  EMAIL_INGESTION_ENABLED: boolean;
+  EMAIL_SERVER: string;
+  EMAIL_ADDRESS: string;
+  EMAIL_PASSWORD?: string;
+  ERP_SYNC_ENABLED: boolean;
+  ERP_WEBHOOK_URL: string;
 }
 
 export async function getBusinessSettings(): Promise<BusinessSettings> {

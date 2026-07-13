@@ -27,6 +27,7 @@ export interface Invoice {
   line_items?: LineItem[];
   rule_results?: RuleResult[];
   processing_logs?: ProcessingLog[];
+  linked_pos?: PurchaseOrder[];
 }
 
 export interface LineItem {
