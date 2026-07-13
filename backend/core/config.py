@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     ERP_WEBHOOK_URL: str = ""
 
     # CORS
-    CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000"]
+    CORS_ORIGINS: list[str] = ["*"]
 
     @property
     def upload_path(self) -> Path:
