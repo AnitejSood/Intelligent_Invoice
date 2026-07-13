@@ -4,6 +4,7 @@ import { UploadCloud, File, X, Sparkles, Check, Loader2, ArrowRight, Shield, Zap
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_BASE_URL } from "@/services/api";
 
 const PIPELINE_STAGES = [
   { id: 1, label: "Document Ingest & Type Detection", desc: "PyMuPDF analyzing layout types" },
@@ -60,7 +61,7 @@ export default function UploadPage() {
     runStages();
 
     try {
-      const response = await fetch("/api/v1/invoices/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/invoices/upload`, {
         method: "POST",
         body: formData,
       });
