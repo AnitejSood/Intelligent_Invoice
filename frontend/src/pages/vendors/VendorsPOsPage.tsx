@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "@/services/api";
 
 export default function VendorsPOsPage() {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export default function VendorsPOsPage() {
   const { data: posData, isLoading: isLoadingPOs } = useQuery({
     queryKey: ['purchase_orders'],
     queryFn: async () => {
-      const res = await fetch(`/api/v1/purchase-orders?limit=100`);
+      const res = await fetch(`${API_BASE_URL}/api/v1/purchase-orders?limit=100`);
       if (!res.ok) throw new Error('Failed to fetch POs');
       return res.json();
     }
@@ -29,7 +30,7 @@ export default function VendorsPOsPage() {
   const { data: vendorsData, isLoading: isLoadingVendors } = useQuery({
     queryKey: ['vendors'],
     queryFn: async () => {
-      const res = await fetch(`/api/v1/vendors?limit=100`);
+      const res = await fetch(`${API_BASE_URL}/api/v1/vendors?limit=100`);
       if (!res.ok) throw new Error('Failed to fetch vendors');
       return res.json();
     }
@@ -37,7 +38,7 @@ export default function VendorsPOsPage() {
 
   const updateVendorStatus = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
-      const res = await fetch(`/api/v1/vendors/${id}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/vendors/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
