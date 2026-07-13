@@ -41,6 +41,14 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables created/verified")
 
+    # Auto-seed database (Crucial for ephemeral Free tier hosting)
+    try:
+        from backend.database import seed
+        seed.main()
+        logger.info("Database auto-seeding completed.")
+    except Exception as e:
+        logger.error(f"Auto-seeding failed: {e}")
+
     # Ensure upload directory exists
     settings.upload_path
     logger.info(f"Upload directory: {settings.UPLOAD_DIR}")
