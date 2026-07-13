@@ -3,6 +3,7 @@ services:
     name: financeflow-backend
     env: python
     rootDir: .
+    plan: free
     buildCommand: "pip install -r backend/requirements.txt"
     startCommand: "python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT"
     envVars:
@@ -10,11 +11,8 @@ services:
         value: 3.11.0
       - key: GEMINI_API_KEY
         sync: false
+      # No persistent disk, so use the default local ephemeral storage
       - key: DATABASE_URL
-        value: sqlite:////opt/render/project/src/data/financeflow.db
+        value: sqlite:///financeflow.db
       - key: UPLOAD_DIR
-        value: /opt/render/project/src/data/uploads
-    disk:
-      name: financeflow-data
-      mountPath: /opt/render/project/src/data
-      sizeGB: 1
+        value: uploads
