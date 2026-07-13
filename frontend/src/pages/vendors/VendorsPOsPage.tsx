@@ -156,19 +156,19 @@ export default function VendorsPOsPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="h-11 bg-slate-950/50 border border-slate-850 rounded-xl px-4 text-sm font-bold text-slate-300 focus:outline-none focus:border-primary/50 appearance-none pr-10 cursor-pointer hover:border-slate-700 transition-colors"
           >
-            <option value="ALL">All Statuses</option>
+            <option value="ALL" className="bg-slate-900 text-slate-200">All Statuses</option>
             {activeTab === 'pos' ? (
               <>
-                <option value="OPEN">OPEN</option>
-                <option value="CLOSED">CLOSED</option>
-                <option value="CANCELLED">CANCELLED</option>
+                <option value="OPEN" className="bg-slate-900 text-slate-200">OPEN</option>
+                <option value="CLOSED" className="bg-slate-900 text-slate-200">CLOSED</option>
+                <option value="CANCELLED" className="bg-slate-900 text-slate-200">CANCELLED</option>
               </>
             ) : (
               <>
-                <option value="APPROVED">APPROVED</option>
-                <option value="PENDING">PENDING</option>
-                <option value="REJECTED">REJECTED</option>
-                <option value="SUSPENDED">SUSPENDED</option>
+                <option value="APPROVED" className="bg-slate-900 text-slate-200">APPROVED</option>
+                <option value="PENDING" className="bg-slate-900 text-slate-200">PENDING</option>
+                <option value="REJECTED" className="bg-slate-900 text-slate-200">REJECTED</option>
+                <option value="SUSPENDED" className="bg-slate-900 text-slate-200">SUSPENDED</option>
               </>
             )}
           </select>
@@ -289,10 +289,10 @@ export default function VendorsPOsPage() {
                           className="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-10"
                           title="Change Status"
                         >
-                          <option value="APPROVED">APPROVED</option>
-                          <option value="PENDING">PENDING</option>
-                          <option value="REJECTED">REJECTED</option>
-                          <option value="SUSPENDED">SUSPENDED</option>
+                          <option value="APPROVED" className="bg-slate-900 text-slate-200">APPROVED</option>
+                          <option value="PENDING" className="bg-slate-900 text-slate-200">PENDING</option>
+                          <option value="REJECTED" className="bg-slate-900 text-slate-200">REJECTED</option>
+                          <option value="SUSPENDED" className="bg-slate-900 text-slate-200">SUSPENDED</option>
                         </select>
                         <button className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 transition-colors relative z-0 pointer-events-none">
                           Edit
